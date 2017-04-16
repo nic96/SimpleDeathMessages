@@ -1,0 +1,2 @@
+C:\Users\Trevor\Desktop\Codies\Unturned\Unturned Plugins\SimpleDeathMessages\bin\Release\SimpleDeathMessages.dll
+C:\Users\Trevor\Desktop\Codies\Unturned\Unturned Plugins\SimpleDeathMessages\obj\Debug\SimpleDeathMessages.dll
