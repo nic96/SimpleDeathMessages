@@ -33,7 +33,7 @@ namespace coolpuppy24.simpledeathmessages
 
         protected override void Unload()
         {
-            UnturnedPlayerEvents.OnPlayerDeath += OnPlayerDeath;
+            UnturnedPlayerEvents.OnPlayerDeath -= OnPlayerDeath;
             Rocket.Core.Logging.Logger.Log("Unload");
         }
 
