@@ -69,6 +69,7 @@ namespace coolpuppy24.simpledeathmessages
                     {"splash","[SPLASH] {0}"},
                     {"acid","[ACID] {0}"},
                     {"spit","[SPIT] {0}"},
+                    {"kill","[ADMIN KILL] {0}"},
                     {"boulder","[BOULDER] {0}"},
                 };
             }
@@ -149,6 +150,10 @@ namespace coolpuppy24.simpledeathmessages
                 else if (cause.ToString() == "BREATH")
                 {
                     UnturnedChat.Say(Translate("breath", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                }
+                else if (cause.ToString() == "KILL")
+                {
+                    UnturnedChat.Say(Translate("kill", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
                 }
                 else if (cause.ToString() == "FREEZING")
                 {
