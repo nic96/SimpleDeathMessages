@@ -22,6 +22,7 @@ namespace coolpuppy24.simpledeathmessages
 
         protected override void Load()
         {
+            Instance = this;
             UnturnedPlayerEvents.OnPlayerDeath += OnPlayerDeath;
             Rocket.Core.Logging.Logger.LogWarning("[SimpleDeathMessages] Made by: Coolpuppy24");
             Rocket.Core.Logging.Logger.LogWarning("------------------------------------------------------");
@@ -33,6 +34,7 @@ namespace coolpuppy24.simpledeathmessages
 
         protected override void Unload()
         {
+            Instance = null;
             UnturnedPlayerEvents.OnPlayerDeath -= OnPlayerDeath;
             Rocket.Core.Logging.Logger.Log("Unload");
         }
@@ -43,7 +45,8 @@ namespace coolpuppy24.simpledeathmessages
             {
                 return new TranslationList()
                 {
-                    {"gun","{0} [GUN] {2} {1}"},
+                    {"gun_headshot","{0} [GUN] {2} {1}"},
+                    {"gun","{0} [GUN] {1}"},
                     {"food","[FOOD] {0}"},
                     {"arena","[ARENA] {0}"},
                     {"shred","[SHRED] {0}"},
@@ -85,7 +88,7 @@ namespace coolpuppy24.simpledeathmessages
                 if (cause.ToString() == "GUN")
                 {
                     if (limb == ELimb.SKULL)
-                        UnturnedChat.Say(Translate("gun", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                        UnturnedChat.Say(Translate("gun_headshot", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
                     else
                         UnturnedChat.Say(Translate("gun", killer.DisplayName, player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
                 }
