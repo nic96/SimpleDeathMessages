@@ -50,8 +50,10 @@ namespace coolpuppy24.simpledeathmessages
                     {"food","[FOOD] {0}"},
                     {"arena","[ARENA] {0}"},
                     {"shred","[SHRED] {0}"},
+                    {"punch_headshot","{0} [PUNCH] {2} {1}"},
                     {"punch","{0} [PUNCH] {1}"},
                     {"bones","[BONES] {0}"},
+                    {"melee_headshot","{0} [MELEE] {2} {1}"},
                     {"melee","{0} [MELEE] {1}"},
                     {"water","[WATER] {0}"},
                     {"breath","[BREATH] {0}"},
@@ -61,7 +63,7 @@ namespace coolpuppy24.simpledeathmessages
                     {"vehicle","[VEHICLE] {0}"},
                     {"suicide","[SUICIDE] {0}"},
                     {"burning","[BURNING] {0}"},
-                    {"headshot","+ [HEADSHOT]" },
+                    {"headshot","[HEADSHOT]" },
                     {"landmine","[LANDMINE] {0}"},
                     {"roadkill","{0} [ROADKILL] {1}"},
                     {"bleeding","[BLEEDING] {0}"},
@@ -83,7 +85,7 @@ namespace coolpuppy24.simpledeathmessages
         {
             UnturnedPlayer killer = UnturnedPlayer.FromCSteamID(murderer);
 
-            string headshot = string.Empty;
+            string headshot = Translate("headshot");
             {
                 if (cause.ToString() == "GUN")
                 {
@@ -95,14 +97,14 @@ namespace coolpuppy24.simpledeathmessages
                 else if (cause.ToString() == "MELEE")
                 {
                     if (limb == ELimb.SKULL)
-                        UnturnedChat.Say(Translate("melee", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                        UnturnedChat.Say(Translate("melee_headshot", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
                     else
                         UnturnedChat.Say(Translate("melee", killer.DisplayName, player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
                 }
                 else if (cause.ToString() == "PUNCH")
                 {
                     if (limb == ELimb.SKULL)
-                        UnturnedChat.Say(Translate("punch", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                        UnturnedChat.Say(Translate("punch_headshot", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
                     else
                         UnturnedChat.Say(Translate("punch", killer.DisplayName, player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
                 }
