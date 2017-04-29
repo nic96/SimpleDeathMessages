@@ -63,7 +63,7 @@ namespace coolpuppy24.simpledeathmessages
                     {"vehicle","[VEHICLE] {0}"},
                     {"suicide","[SUICIDE] {0}"},
                     {"burning","[BURNING] {0}"},
-                    {"headshot","[HEADSHOT]" },
+                    {"headshot","+ [HEADSHOT]" },
                     {"landmine","[LANDMINE] {0}"},
                     {"roadkill","{0} [ROADKILL] {1}"},
                     {"bleeding","[BLEEDING] {0}"},
