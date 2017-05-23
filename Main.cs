@@ -73,6 +73,8 @@ namespace coolpuppy24.simpledeathmessages
                     {"missile","[MISSILE] {0}"},
                     {"splash","[SPLASH] {0}"},
                     {"acid","[ACID] {0}"},
+                    {"spark", "[SPARK] {0}"},
+                    {"infection", "[INFECTION] {0}"},
                     {"spit","[SPIT] {0}"},
                     {"kill","[ADMIN KILL] {0}"},
                     {"boulder","[BOULDER] {0}"},
