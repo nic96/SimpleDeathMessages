@@ -10,15 +10,11 @@ namespace coolpuppy24.simpledeathmessages
     {
         public string DeathMessagesColor;
         public bool ShowSuicideMSG;
-        public bool EnableExpOnKill;
-        public int ExpOnKill;
 
         public void LoadDefaults()
         {
             DeathMessagesColor = "Red";
             ShowSuicideMSG = true;
-            EnableExpOnKill = true;
-            ExpOnKill = 100;
         }
     }
 }
