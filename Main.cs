@@ -1,17 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Rocket.API;
 using Rocket.Unturned.Player;
 using UnityEngine;
 using SDG.Unturned;
 using Rocket.Core.Plugins;
-using Rocket.Core.Logging;
 using Rocket.API.Collections;
 using Rocket.Unturned.Chat;
-using Rocket.Core;
-using System.Collections.Generic;
-using Steamworks;
 using Rocket.Unturned.Events;
 
 namespace coolpuppy24.simpledeathmessages
@@ -89,137 +81,50 @@ namespace coolpuppy24.simpledeathmessages
 
             string headshot = Translate("headshot");
             {
-                if (cause.ToString() == "GUN")
+                if (cause.ToString() == "SHRED" || cause.ToString() == "ZOMBIE" || cause.ToString() == "ANIMAL" || cause.ToString() == "SPARK" || cause.ToString() == "VEHICLE" || cause.ToString() == "FOOD" || cause.ToString() == "WATER" || cause.ToString() == "INFECTION" || cause.ToString() == "BLEEDING" || cause.ToString() == "LANDMINE" || cause.ToString() == "BREATH" || cause.ToString() == "KILL" || cause.ToString() == "FREEZING" || cause.ToString() == "SENTRY" || cause.ToString() == "CHARGE" || cause.ToString() == "MISSILE" || cause.ToString() == "BONES" || cause.ToString() == "SPLASH" || cause.ToString() == "ACID" || cause.ToString() == "SPIT" || cause.ToString() == "BURNING" || cause.ToString() == "BURNER" || cause.ToString() == "BOULDER" || cause.ToString() == "ARENA" || cause.ToString() == "GRENADE" || (Configuration.Instance.ShowSuicideMSG == true && cause.ToString() == "SUICIDE") || cause.ToString() == "ROADKILL" || cause.ToString() == "MELEE" || cause.ToString() == "GUN" || cause.ToString() == "PUNCH")
                 {
-                    if (limb == ELimb.SKULL)
-                        UnturnedChat.Say(Translate("gun_headshot", killer.DisplayName, player.DisplayName, headshot, Rocket.Unturned.Player.UnturnedPlayer.FromCSteamID(murderer).Player.equipment.asset.itemName.ToString()), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                    if (cause.ToString() != "ROADKILL" && cause.ToString() != "MELEE" && cause.ToString() != "GUN" && cause.ToString() != "PUNCH")
+                    {
+                        UnturnedChat.Say(Translate(cause.ToString().ToLower(), player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                    }
+                    else if (cause.ToString() == "ROADKILL")
+                    {
+                        UnturnedChat.Say(Translate("roadkill", killer.DisplayName, player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                    }
+                    else if (cause.ToString() == "MELEE" || cause.ToString() == "GUN")
+                    {
+                        if (limb == ELimb.SKULL)
+                            UnturnedChat.Say(Translate(cause.ToString().ToLower() + "_headshot", killer.DisplayName, player.DisplayName, headshot, Rocket.Unturned.Player.UnturnedPlayer.FromCSteamID(murderer).Player.equipment.asset.itemName.ToString()), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                        else
+                            UnturnedChat.Say(Translate(cause.ToString().ToLower(), killer.DisplayName, player.DisplayName, Rocket.Unturned.Player.UnturnedPlayer.FromCSteamID(murderer).Player.equipment.asset.itemName.ToString()), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                    }
+                    else if (cause.ToString() == "PUNCH")
+                    {
+                        if (limb == ELimb.SKULL)
+                            UnturnedChat.Say(Translate("punch_headshot", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                        else
+                            UnturnedChat.Say(Translate("punch", killer.DisplayName, player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                    }
+                }
+                else //No need to update the plugin later! (Just add the translation)
+                {
+                    if (Translate(cause.ToString().ToLower()) != null)
+                    {
+                        if (Translate(cause.ToString().ToLower()).Contains("{1}"))
+                        {
+                            UnturnedChat.Say(Translate(cause.ToString().ToLower(), player.DisplayName , killer.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                        }
+                        else
+                        {
+                            UnturnedChat.Say(Translate(cause.ToString().ToLower(), player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                        }
+                    }
                     else
-                        UnturnedChat.Say(Translate("gun", killer.DisplayName, player.DisplayName, Rocket.Unturned.Player.UnturnedPlayer.FromCSteamID(murderer).Player.equipment.asset.itemName.ToString()), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "MELEE")
-                {
-                    if (limb == ELimb.SKULL)
-                        UnturnedChat.Say(Translate("melee_headshot", killer.DisplayName, player.DisplayName, headshot, Rocket.Unturned.Player.UnturnedPlayer.FromCSteamID(murderer).Player.equipment.asset.itemName.ToString()), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                    else
-                        UnturnedChat.Say(Translate("melee", killer.DisplayName, player.DisplayName, Rocket.Unturned.Player.UnturnedPlayer.FromCSteamID(murderer).Player.equipment.asset.itemName.ToString()), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "PUNCH")
-                {
-                    if (limb == ELimb.SKULL)
-                        UnturnedChat.Say(Translate("punch_headshot", killer.DisplayName, player.DisplayName, headshot), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                    else
-                        UnturnedChat.Say(Translate("punch", killer.DisplayName, player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "SHRED")
-                {
-                    UnturnedChat.Say(Translate("shred", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "ZOMBIE")
-                {
-                    UnturnedChat.Say(Translate("zombie", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "ANIMAL")
-                {
-                    UnturnedChat.Say(Translate("animal", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "ROADKILL")
-                {
-                    UnturnedChat.Say(Translate("roadkill", killer.DisplayName, player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "SPARK")
-                {
-                    UnturnedChat.Say(Translate("spark", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "VEHICLE")
-                {
-                    UnturnedChat.Say(Translate("vehicle", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "FOOD")
-                {
-                    UnturnedChat.Say(Translate("food", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "WATER")
-                {
-                    UnturnedChat.Say(Translate("water", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "INFECTION")
-                {
-                    UnturnedChat.Say(Translate("infection", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "BLEEDING")
-                {
-                    UnturnedChat.Say(Translate("bleeding", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "LANDMINE")
-                {
-                    UnturnedChat.Say(Translate("landmine", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "BREATH")
-                {
-                    UnturnedChat.Say(Translate("breath", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "KILL")
-                {
-                    UnturnedChat.Say(Translate("kill", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "FREEZING")
-                {
-                    UnturnedChat.Say(Translate("freezing", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "SENTRY")
-                {
-                    UnturnedChat.Say(Translate("sentry", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "CHARGE")
-                {
-                    UnturnedChat.Say(Translate("charge", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "MISSILE")
-                {
-                    UnturnedChat.Say(Translate("missile", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "BONES")
-                {
-                    UnturnedChat.Say(Translate("bones", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "SPLASH")
-                {
-                    UnturnedChat.Say(Translate("splash", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "ACID")
-                {
-                    UnturnedChat.Say(Translate("acid", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "SPIT")
-                {
-                    UnturnedChat.Say(Translate("spit", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "BURNING")
-                {
-                    UnturnedChat.Say(Translate("burning", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "BURNER")
-                {
-                    UnturnedChat.Say(Translate("burner", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "BOULDER")
-                {
-                    UnturnedChat.Say(Translate("boulder", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "ARENA")
-                {
-                    UnturnedChat.Say(Translate("arena", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "SUICIDE" && Configuration.Instance.ShowSuicideMSG)
-                {
-                    UnturnedChat.Say(Translate("suicide", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
-                }
-                else if (cause.ToString() == "GRENADE")
-                {
-                    UnturnedChat.Say(Translate("grenade", player.DisplayName), UnturnedChat.GetColorFromName(Configuration.Instance.DeathMessagesColor, Color.green));
+                    {
+                        Rocket.Core.Logging.Logger.LogError("Please add translation for " + cause.ToString() + " | Parameters for custom translation: {0} = Player , {1} = Killer");
+                    }
                 }
             }
         }
-
     }
 }
