@@ -6,7 +6,7 @@ using System.Text;
 
 namespace coolpuppy24.simpledeathmessages
 {
-    public class Configuration : IRocketPluginConfiguration
+    public class SimpleDeathMessagesConfiguration : IRocketPluginConfiguration
     {
         public string DeathMessagesColor;
         public bool ShowSuicideMSG;
