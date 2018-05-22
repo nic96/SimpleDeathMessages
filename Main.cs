@@ -28,15 +28,15 @@ namespace coolpuppy24.simpledeathmessages
 
         public override Dictionary<string, string> DefaultTranslations => new Dictionary<string, string>
         {
-            {"gun_headshot","{0} [GUN - {3}] {2} {1}"},
-            {"gun","{0} [GUN - {2}] {1}"},
+            {"gun_headshot","{1} [GUN - {3}] {2} {0}"},
+            {"gun","{1} [GUN - {2}] {0}"},
             {"food","[FOOD] {0}"},
             {"arena","[ARENA] {0}"},
             {"shred","[SHRED] {0}"},
-            {"punch_headshot","{0} [PUNCH] {2} {1}"},
+            {"punch_headshot","{1} [PUNCH] {2} {0}"},
             {"punch","{0} [PUNCH] {1}"},
             {"bones","[BONES] {0}"},
-            {"melee_headshot","{0} [MELEE - {3}] {2} {1}"},
+            {"melee_headshot","{1} [MELEE - {3}] {2} {0}"},
             {"melee","{0} [MELEE- {2}] {1}"},
             {"water","[WATER] {0}"},
             {"breath","[BREATH] {0}"},
@@ -48,7 +48,7 @@ namespace coolpuppy24.simpledeathmessages
             {"burning","[BURNING] {0}"},
             {"headshot","+ [HEADSHOT]" },
             {"landmine","[LANDMINE] {0}"},
-            {"roadkill","{0} [ROADKILL] {1}"},
+            {"roadkill","{1} [ROADKILL] {0}"},
             {"bleeding","[BLEEDING] {0}"},
             {"freezing","[FREEZING] {0}"},
             {"sentry","[SENTRY] {0}"},
@@ -73,11 +73,11 @@ namespace coolpuppy24.simpledeathmessages
         {
             var player = (UnturnedPlayer)@event.Player;
 
-            UnturnedPlayer killer = ((UnturnedPlayerEntity)@event.Killer).UnturnedPlayer;
+            UnturnedPlayer killer = ((UnturnedPlayerEntity)@event.Killer).Player;
             var cause = @event.DeathCause;
             var limb = @event.Limb;
 
-            var deathmessageColor = Color.Green; //ConfigurationInstance.DeathMessagesColor;
+            var deathmessageColor = Color.Red; //ConfigurationInstance.DeathMessagesColor;
 
 
             string headshot = Translations.Get("headshot");
@@ -106,35 +106,35 @@ namespace coolpuppy24.simpledeathmessages
                 else if (cause.ToString() == "MELEE" || cause.ToString() == "GUN")
                 {
                     if (limb == ELimb.SKULL)
-                        _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower() + "_headshot", deathmessageColor, player.DisplayName, killer.DisplayName, headshot, killer.Player.equipment.asset.itemName);
+                        _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower() + "_headshot", deathmessageColor, player.DisplayName, killer.DisplayName, headshot, killer.NativePlayer.equipment.asset.itemName);
                     else
-                        _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower(), deathmessageColor, player.DisplayName, killer.DisplayName, headshot, killer.Player.equipment.asset.itemName);
+                        _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower(), deathmessageColor, player.DisplayName, killer.DisplayName, headshot, killer.NativePlayer.equipment.asset.itemName);
                 }
                 else if (cause.ToString() == "PUNCH")
                 {
                     _userManager.BroadcastLocalized(Translations,
                         limb == ELimb.SKULL ? "punch_headshot" : "punch", deathmessageColor, player.DisplayName, killer.DisplayName, headshot);
                 }
+
+                return;
             }
-            else //No need to update the plugin later! (Just add the translation)
+
+            if (Translations.Get(cause.ToString().ToLower()) != null)
             {
-                if (Translations.Get(cause.ToString().ToLower()) != null)
+                if (Translations.Get(cause.ToString().ToLower()).Contains("{1}"))
                 {
-                    if (Translations.Get(cause.ToString().ToLower()).Contains("{1}"))
-                    {
-                        _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower(), deathmessageColor, player.DisplayName, killer.DisplayName, headshot);
-                    }
-                    else
-                    {
-                        _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower(), deathmessageColor, player.DisplayName, headshot);
-                    }
+                    _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower(), deathmessageColor, player.DisplayName, killer.DisplayName, headshot);
                 }
                 else
                 {
-                    Logger.LogError("Please add translation for " + cause +
-                                    " | Parameters for custom translation: {0} = Player , {1} = Killer");
+                    _userManager.BroadcastLocalized(Translations, cause.ToString().ToLower(), deathmessageColor, player.DisplayName, headshot);
                 }
+
+                return;
             }
+
+            Logger.LogError("Please add translation for " + cause +
+                            " | Parameters for custom translation: {0} = Player , {1} = Killer");
         }
     }
 }

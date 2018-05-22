@@ -6,16 +6,10 @@ using System.Text;
 
 namespace coolpuppy24.simpledeathmessages
 {
-    public class SimpleDeathMessagesConfiguration : IRocketPluginConfiguration
+    public class SimpleDeathMessagesConfiguration
     {
-        public string DeathMessagesColor;
-        public bool ShowSuicideMSG;
-
-        public void LoadDefaults()
-        {
-            DeathMessagesColor = "Red";
-            ShowSuicideMSG = true;
-        }
+        //public string DeathMessagesColor = "Red";
+        public bool ShowSuicideMSG = true;
     }
 }
 
