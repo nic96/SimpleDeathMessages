@@ -33,7 +33,7 @@ namespace coolpuppy24.simpledeathmessages
                 {"shred","{0} was shreaded to bits!"},
                 {"punch","{0} was punched to death in the {1} by {2}"},
                 {"bones","{0} shattered his bones and died!"},
-                {"melee","{0} was punched to death in the {1} by {2"},
+                {"melee","{0} was chopped to death in the {1} by {2} using a {3}"},
                 {"water","{0} dehydrated to death!"},
                 {"breath","{0} suffocated to death!"},
                 {"zombie","{0} was mauled by a zombie!"},
